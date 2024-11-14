@@ -1,5 +1,5 @@
 langchain-groq
 langchain-core
 streamlit>= 1.9.2
---upgrade pip
+pip==24.0
 googletrans==4.0.0-rc1
