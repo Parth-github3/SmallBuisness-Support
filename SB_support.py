@@ -217,14 +217,6 @@ pages = {
     ],
 }
 
-#Clear history button
-st.sidebar.markdown("""
-                    **This button will clear the response history.** &mdash; :point_down:\n 
-                    Recommended if you are switching pages.
-                    """)
-if st.sidebar.button("Clear History"):
-    st.session_state.clear()
-
 # Navigation page execution
 pg = st.navigation(pages)
 pg.run()
