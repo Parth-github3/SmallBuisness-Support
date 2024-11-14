@@ -23,43 +23,38 @@ def translate_input(user_input):
     try:
         # Detect language
         detected_lang = translator.detect(user_input)
-        # Log the detected_lang object for debugging
-        st.info(f"Detected Language Object: {detected_lang}")
         
-        # Handle based on `translatepy`'s actual output
-        if hasattr(detected_lang, 'language'):
-            detected_language_name = detected_lang.language
+        # Safely check if the detected_lang has a valid structure
+        if detected_lang is None or not hasattr(detected_lang, "language"):
+            # Fallback in case detection fails
+            detected_language_name = "Unknown"
         else:
-            detected_language_name = str(detected_lang)  # Fallback to string representation
-        
-        # If the language is not English, translate it
+            detected_language_name = detected_lang.language
+
+        # If the detected language is not English, translate it
         if detected_language_name != "English":
             translated_input = translator.translate(user_input, "English").result
         else:
             translated_input = user_input
-        
+
         return translated_input, detected_language_name
-    except AttributeError as e:
-        # Handle AttributeError for missing attribute
-        st.error(f"Error in language detection or translation: {e}")
-        return user_input, "English"  # Assume default as English
     except Exception as e:
-        # General error handling
-        st.error(f"Unexpected error: {e}")
-        return user_input, "English"
+        # Handle errors gracefully and provide a fallback
+        st.warning(f"Language detection failed. Proceeding with input as-is. Error: {e}")
+        return user_input, "Unknown"  # Default fallback
 
 # 2. Output Translation Chain
 def translate_output(response, target_lang):
-    """Translate response back to user's language."""
+    """Translate response back to the user's language."""
     try:
-        if target_lang != "English":
+        if target_lang != "English" and target_lang != "Unknown":
             translated_response = translator.translate(response, target_lang).result
         else:
             translated_response = response
         return translated_response
     except Exception as e:
-        st.error(f"Error in translating response: {e}")
-        return response  # Return original response if translation fails
+        st.warning(f"Translation to the target language failed. Error: {e}")
+        return response  # Return the original response as a fallback
 
 # 3. Fallback Error Handling Chain
 fallback_chain = (
