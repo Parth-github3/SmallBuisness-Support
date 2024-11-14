@@ -21,10 +21,12 @@ translator = Translator()  # Translator for multilingual support
 def translate_input(user_input):
     """Auto-detect and translate the user input to English."""
     try:
-        detected_lang = translator.detect_language(user_input).result
-        if detected_lang != "English":
-            user_input = translator.translate(user_input, destination_language="English").result
-        return user_input, detected_lang
+        detected_lang = translator.language(user_input)  # Correct method for detecting language
+        if detected_lang.result != "English":
+            translated_input = translator.translate(user_input, destination_language="English").result
+        else:
+            translated_input = user_input
+        return translated_input, detected_lang.result
     except Exception as e:
         st.error(f"Error in language detection or translation: {e}")
         return user_input, "English"  # Default to English if detection fails
@@ -34,8 +36,10 @@ def translate_output(response, target_lang):
     """Translate response back to the user's language."""
     try:
         if target_lang != "English":
-            response = translator.translate(response, destination_language=target_lang).result
-        return response
+            translated_response = translator.translate(response, destination_language=target_lang).result
+        else:
+            translated_response = response
+        return translated_response
     except Exception as e:
         st.error(f"Error in translating response: {e}")
         return response  # Return the original response if translation fails
