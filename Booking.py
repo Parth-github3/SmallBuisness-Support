@@ -54,7 +54,7 @@ Input Query: "{query}"
 # 5. Booking Management Chain
 booking_chain = (
     ChatPromptTemplate.from_template("""
-You are a virtual assistant that manages bookings for a business. The user wants to {action} for a service: "{service}". 
+You are a virtual assistant that manages bookings for a business. The user wants to {action} for a service: "{service}" on the following date and time {d}{t}. 
 If they provide a time or date, confirm the booking; if not, ask for more details.
 """)
     | llama
@@ -70,8 +70,13 @@ You are a follow-up assistant. Based on the previous interaction: "{previous_int
     | StrOutputParser()
 )
 
-
 service = st.text_input("Service Type (e.g., Haircut, Meeting, etc.):")
+d = st.date_input("When to perfom action?", value=None)
+st.write("You have changed to:", d)
+t = st.time_input("Set an alarm for", value=None)
+st.write("Alarm is set for", t)
+
+
 if service:
     # Base Chain: Translate input to English
     translated_input, user_lang = translate_input(service)
@@ -79,12 +84,11 @@ if service:
     
     action = st.text_input("Action (e.g., Book, Cancel, Reschedule):")
     if service and action:
-        response = booking_chain.invoke({"action": action, "service": service})
+        response = booking_chain.invoke({"action": action, "service": service, "date": d, "time": t})
     else:
         response = fallback_chain.invoke({"query": "Missing service or action details."})
 
-    d = st.date_input("When to perfom action?", value=None)
-    st.write("You have changed to:", d)
+
     # Base Chain: Translate output back to user language
     if response:
         translated_response = translate_output(response, user_lang)
