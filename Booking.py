@@ -70,13 +70,13 @@ You are a follow-up assistant. Based on the previous interaction: "{previous_int
     | StrOutputParser()
 )
 
-user_input = st.text_input("Ask your question here:")
 
-if user_input:
+service = st.text_input("Service Type (e.g., Haircut, Meeting, etc.):")
+if service:
     # Base Chain: Translate input to English
-    translated_input, user_lang = translate_input(user_input)
+    translated_input, user_lang = translate_input(service)
     
-    service = st.text_input("Service Type (e.g., Haircut, Meeting, etc.):")
+    
     action = st.text_input("Action (e.g., Book, Cancel, Reschedule):")
     if service and action:
         response = booking_chain.invoke({"action": action, "service": service})
