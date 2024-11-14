@@ -71,7 +71,7 @@ If they provide a time or date, confirm the booking; if not, ask for more detail
 # 6. Product Information Chain
 product_info_chain = (
     ChatPromptTemplate.from_template("""
-You are a knowledgeable sales assistant. The user is asking about: "{product}". 
+You are a knowledgeable sales assistant. The user is asking about: "{bot_response}". 
 Provide detailed information including features, pricing, and availability.
 """)
     | llama
@@ -182,6 +182,6 @@ if user_input:
         st.write("Suggestions:", contextual_response)
 
 if st.button("Submit"):
-     message = st.chat_message("assistant")
+     
      bot_response = buisness_chain.invoke(buisness)
-     st.write("RES:", bot_response)
+     
