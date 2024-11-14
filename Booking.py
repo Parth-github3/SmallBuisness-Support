@@ -78,7 +78,7 @@ if service:
     
     
     action = st.text_input("Action (e.g., Book, Cancel, Reschedule):")
-    if action:
+    if service and action:
         response = booking_chain.invoke({"action": action, "service": service})
     else:
         response = fallback_chain.invoke({"query": "Missing service or action details."})

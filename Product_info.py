@@ -71,12 +71,12 @@ You are a follow-up assistant. Based on the previous interaction: "{previous_int
     | StrOutputParser()
 )
 
-user_input = st.text_input("Ask your question here:")
 
-if user_input:
+product = st.text_input("Product Name:")
+if product:
     # Base Chain: Translate input to English
-    translated_input, user_lang = translate_input(user_input)
-    product = st.text_input("Product Name:")
+    translated_input, user_lang = translate_input(product)
+
     if product:
         response = product_info_chain.invoke({"product": product})
     else:
