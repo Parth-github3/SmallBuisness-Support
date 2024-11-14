@@ -15,39 +15,21 @@ llama = ChatGroq(
 
 translator = Translator()  # Translator for multilingual support
 
-##################################### Base Chains ###########################################
-# 1. Input Translation Chain
-translate_input_chain = (
-    ChatPromptTemplate.from_template("""
-You are a language translator. Detect the input language and translate it into English. 
-Input: "{input_text}"
-""")
-    | llama
-    | StrOutputParser()
-)
+##################################### Multilingual Chain ###########################################
+def translate_input(user_input):
+    """Auto-detect and translate the user input to English"""
+    detected_lang = translator.detect(user_input).lang
+    if detected_lang != 'en':
+        user_input = translator.translate(user_input, src=detected_lang, dest='en').text
+    return user_input, detected_lang
 
-# 2. Output Translation Chain
-translate_output_chain = (
-    ChatPromptTemplate.from_template("""
-You are a language translator. Translate the following text into the target language: "{target_language}".
-Input Text: "{response_text}"
-""")
-    | llama
-    | StrOutputParser()
-)
+def translate_output(response, target_lang):
+    """Translate response back to the user's language"""
+    if target_lang != 'en':
+        response = translator.translate(response, src='en', dest=target_lang).text
+    return response
 
-# 3. Fallback Error Handling Chain
-fallback_chain = (
-    ChatPromptTemplate.from_template("""
-You are a fallback assistant. If the system cannot handle the query, respond politely and suggest contacting support.
-Input Query: "{query}"
-""")
-    | llama
-    | StrOutputParser()
-)
-
-##################################### Advanced Chains ###########################################
-# 4. General Query Chain
+##################################### Query Handling ###########################################
 query_chain = (
     ChatPromptTemplate.from_template("""
 You are a customer support assistant. The user has the query: "{query}". 
@@ -57,7 +39,7 @@ Respond with a clear and concise answer. If you don't know the answer, ask for m
     | StrOutputParser()
 )
 
-# 5. Booking Management Chain
+##################################### Booking Management ###########################################
 booking_chain = (
     ChatPromptTemplate.from_template("""
 You are a virtual assistant that manages bookings for a business. The user wants to {action} for a service: "{service}". 
@@ -67,7 +49,7 @@ If they provide a time or date, confirm the booking; if not, ask for more detail
     | StrOutputParser()
 )
 
-# 6. Product Information Chain
+##################################### Product Information ###########################################
 product_info_chain = (
     ChatPromptTemplate.from_template("""
 You are a knowledgeable sales assistant. The user is asking about: "{product}". 
@@ -77,7 +59,7 @@ Provide detailed information including features, pricing, and availability.
     | StrOutputParser()
 )
 
-# 7. Customization Chain
+##################################### Customization Chain ###########################################
 custom_chain = (
     ChatPromptTemplate.from_template("""
 You are assisting a small business that specializes in {business_type}. Tailor your response to reflect the company's services and brand tone.
@@ -87,7 +69,7 @@ The user query is: "{query}".
     | StrOutputParser()
 )
 
-# 8. Contextual Query Chain
+##################################### Contextual Query Chain ###########################################
 context_chain = (
     ChatPromptTemplate.from_template("""
 You are a follow-up assistant. Based on the previous interaction: "{previous_interaction}", suggest a related query or provide further assistance.
@@ -119,8 +101,8 @@ option = st.selectbox(
 user_input = st.text_input("Ask your question here:")
 
 if user_input:
-    # Base Chain: Translate input to English
-    translated_input, user_lang = translate_input_chain.invoke({"input_text": user_input}), 'en'
+    # Translate input
+    translated_input, user_lang = translate_input(user_input)
     
     # Select chain based on option
     if option == "General Query":
@@ -131,23 +113,23 @@ if user_input:
         if service and action:
             response = booking_chain.invoke({"action": action, "service": service})
         else:
-            response = fallback_chain.invoke({"query": "Missing service or action details."})
+            response = "Please provide both service and action details."
     elif option == "Product Information":
         product = st.text_input("Product Name:")
         if product:
-            response = product_info_chain.invoke({"product": product})
+            response = product_info_chain.invoke({"product": translated_input})
         else:
-            response = fallback_chain.invoke({"query": "Missing product details."})
+            response = "Please provide the product name."
     elif option == "Customized Responses":
         business_type = st.text_input("Business Type (e.g., Restaurant, Salon, etc.):")
         if business_type:
             response = custom_chain.invoke({"business_type": business_type, "query": translated_input})
         else:
-            response = fallback_chain.invoke({"query": "Missing business type."})
+            response = "Please specify the business type."
     
-    # Base Chain: Translate output back to user language
-    translated_response = translate_output_chain.invoke({"response_text": response, "target_language": user_lang})
-    st.write("Response:", translated_response)
+    # Translate output back to user language
+    response = translate_output(response, user_lang)
+    st.write("Response:", response)
 
     # Contextual Suggestions
     if st.checkbox("Need more help? Get suggestions."):
