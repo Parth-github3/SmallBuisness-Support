@@ -107,7 +107,7 @@ Identify the buisness, the products and services offered in the buisness, the pr
     | StrOutputParser()
     | RunnablePassthrough
 )
-p_chain = (buisness_chain | product_info_chain)
+
 ##################################### Streamlit UI ###########################################
 st.title("AI Customer Support Assistant")
 st.sidebar.header("About")
@@ -162,7 +162,7 @@ if user_input:
     elif option == "Product Information":
         product = st.text_input("Product Name:")
         if product:
-            response = p_chain.invoke({"product": product})
+            response = product_info_chain.invoke({"product": product})
         else:
             response = fallback_chain.invoke({"query": "Missing product details."})
     elif option == "Customized Responses":
