@@ -189,15 +189,15 @@ import streamlit as st
 
 # Title
 st.title("AI Customer Support Assistant")
-st.sidebar.header("About")
-st.sidebar.write("""
-This app is a customizable AI-powered customer support chatbot. Features include:
-- Multilingual support
-- Booking management
-- Product information retrieval
-- Contextual query handling
-- Customizable responses for businesses
-""")
+# st.sidebar.header("About")
+# st.sidebar.write("""
+# This app is a customizable AI-powered customer support chatbot. Features include:
+# - Multilingual support
+# - Booking management
+# - Product information retrieval
+# - Contextual query handling
+# - Customizable responses for businesses
+# """)
 
 pages = {
     "Home": [
