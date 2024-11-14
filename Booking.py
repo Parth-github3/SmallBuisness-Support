@@ -72,9 +72,9 @@ You are a follow-up assistant. Based on the previous interaction: "{previous_int
 
 service = st.text_input("Service Type (e.g., Haircut, Meeting, etc.):")
 date = st.date_input("When to perfom action?", value=None)
-st.write("You have changed to:", d)
+st.write("You have changed to:", date)
 time = st.time_input("Set an alarm for", value=None)
-st.write("Alarm is set for", t)
+st.write("Alarm is set for", time)
 
 
 if service:
