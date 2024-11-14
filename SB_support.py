@@ -181,4 +181,5 @@ if user_input:
         contextual_response = context_chain.invoke({"previous_interaction": translated_input})
         st.write("Suggestions:", contextual_response)
 
-     
+if st.button("Submit"):
+    buisness_chain.invoke(buisness)
