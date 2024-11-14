@@ -1,5 +1,5 @@
 langchain-groq
 langchain-core
 streamlit>= 1.9.2
-translatepy
+googletrans
 pdfplumber
