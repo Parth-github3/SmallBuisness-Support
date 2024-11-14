@@ -150,7 +150,7 @@ user_input = st.text_input("Ask your question here:")
 
 if user_input:
     # Base Chain: Translate input to English
-    translated_input, user_lang = translate_input_chain.invoke({"input_text": user_input}), 'en'
+    translated_input, user_lang = translate_input(user_input)
     
     # Select chain based on option
     if option == "General Query":
@@ -176,8 +176,9 @@ if user_input:
             response = fallback_chain.invoke({"query": "Missing business type."})
     
     # Base Chain: Translate output back to user language
-    translated_response = translate_output_chain.invoke({"response_text": response, "target_language": user_lang})
-    st.write("Response:", translated_response)
+    if response:
+        translated_response = translate_output(response, user_lang)
+        st.write("Response:", translated_response)
 
     # Contextual Suggestions
     if st.checkbox("Need more help? Get suggestions."):
