@@ -72,7 +72,7 @@ If they provide a time or date, confirm the booking; if not, ask for more detail
 product_info_chain = (
     ChatPromptTemplate.from_template("""
 You are a knowledgeable sales assistant. The user is asking about: "{product}". 
-Provide detailed information including features, pricing, and availability on the basis of this information {bot_responce}.
+Provide detailed information including features, pricing, and availability.
 """)
     | llama
     | StrOutputParser()
