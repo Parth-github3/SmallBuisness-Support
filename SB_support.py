@@ -4,7 +4,7 @@ import streamlit as st
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from googletrans import Translator  # Multilingual support
+from translatepy import Translator  # Multilingual support
 
 #LLM Model
 llama = ChatGroq(
@@ -18,15 +18,15 @@ translator = Translator()  # Translator for multilingual support
 ##################################### Multilingual Chain ###########################################
 def translate_input(user_input):
     """Auto-detect and translate the user input to English"""
-    detected_lang = translator.detect(user_input).lang
-    if detected_lang != 'en':
-        user_input = translator.translate(user_input, src=detected_lang, dest='en').text
+    detected_lang = translator.detect_language(user_input).result
+    if detected_lang != 'English':
+        user_input = translator.translate(user_input, destination_language="English").result
     return user_input, detected_lang
 
 def translate_output(response, target_lang):
     """Translate response back to the user's language"""
-    if target_lang != 'en':
-        response = translator.translate(response, src='en', dest=target_lang).text
+    if target_lang != 'English':
+        response = translator.translate(response, destination_language=target_lang).result
     return response
 
 ##################################### Query Handling ###########################################
