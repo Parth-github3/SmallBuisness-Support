@@ -13,23 +13,33 @@ llama = ChatGroq(
     temperature=0.0
 )
 
-translator = Translator()  # Translator for multilingual support
+# Translator instance
+translator = Translator()
 
-##################################### Multilingual Chain ###########################################
+##################################### Translation Functions ###########################################
 def translate_input(user_input):
-    """Auto-detect and translate the user input to English"""
-    detected_lang = translator.detect_language(user_input).result
-    if detected_lang != 'English':
-        user_input = translator.translate(user_input, destination_language="English").result
-    return user_input, detected_lang
+    """Auto-detect and translate the user input to English."""
+    try:
+        detected_lang = translator.detect_language(user_input).result
+        if detected_lang != "English":
+            user_input = translator.translate(user_input, destination_language="English").result
+        return user_input, detected_lang
+    except Exception as e:
+        st.error(f"Error in language detection or translation: {e}")
+        return user_input, "English"  # Default to English if detection fails
 
 def translate_output(response, target_lang):
-    """Translate response back to the user's language"""
-    if target_lang != 'English':
-        response = translator.translate(response, destination_language=target_lang).result
-    return response
+    """Translate response back to the user's language."""
+    try:
+        if target_lang != "English":
+            response = translator.translate(response, destination_language=target_lang).result
+        return response
+    except Exception as e:
+        st.error(f"Error in translating response: {e}")
+        return response  # Return the original response if translation fails
 
-##################################### Query Handling ###########################################
+##################################### Chat Chains ###########################################
+# General Query Chain
 query_chain = (
     ChatPromptTemplate.from_template("""
 You are a customer support assistant. The user has the query: "{query}". 
@@ -39,7 +49,7 @@ Respond with a clear and concise answer. If you don't know the answer, ask for m
     | StrOutputParser()
 )
 
-##################################### Booking Management ###########################################
+# Booking Management Chain
 booking_chain = (
     ChatPromptTemplate.from_template("""
 You are a virtual assistant that manages bookings for a business. The user wants to {action} for a service: "{service}". 
@@ -49,7 +59,7 @@ If they provide a time or date, confirm the booking; if not, ask for more detail
     | StrOutputParser()
 )
 
-##################################### Product Information ###########################################
+# Product Information Chain
 product_info_chain = (
     ChatPromptTemplate.from_template("""
 You are a knowledgeable sales assistant. The user is asking about: "{product}". 
@@ -59,7 +69,7 @@ Provide detailed information including features, pricing, and availability.
     | StrOutputParser()
 )
 
-##################################### Customization Chain ###########################################
+# Customized Response Chain
 custom_chain = (
     ChatPromptTemplate.from_template("""
 You are assisting a small business that specializes in {business_type}. Tailor your response to reflect the company's services and brand tone.
@@ -69,7 +79,7 @@ The user query is: "{query}".
     | StrOutputParser()
 )
 
-##################################### Contextual Query Chain ###########################################
+# Contextual Query Chain
 context_chain = (
     ChatPromptTemplate.from_template("""
 You are a follow-up assistant. Based on the previous interaction: "{previous_interaction}", suggest a related query or provide further assistance.
@@ -80,6 +90,7 @@ You are a follow-up assistant. Based on the previous interaction: "{previous_int
 
 ##################################### Streamlit UI ###########################################
 st.title("AI Customer Support Assistant")
+
 st.sidebar.header("About")
 st.sidebar.write("""
 This app is a customizable AI-powered customer support chatbot. Features include:
@@ -90,21 +101,22 @@ This app is a customizable AI-powered customer support chatbot. Features include
 - Customizable responses for businesses
 """)
 
-# Sidebar selection
+# Sidebar module selection
 option = st.selectbox(
     "Choose a support module:",
     ("General Query", "Booking Management", "Product Information", "Customized Responses"),
     index=0
 )
 
-# User Interaction
+# User input
 user_input = st.text_input("Ask your question here:")
 
 if user_input:
     # Translate input
     translated_input, user_lang = translate_input(user_input)
-    
-    # Select chain based on option
+
+    # Select the appropriate chain
+    response = ""
     if option == "General Query":
         response = query_chain.invoke({"query": translated_input})
     elif option == "Booking Management":
@@ -113,25 +125,26 @@ if user_input:
         if service and action:
             response = booking_chain.invoke({"action": action, "service": service})
         else:
-            response = "Please provide both service and action details."
+            st.warning("Please provide both service and action details.")
     elif option == "Product Information":
         product = st.text_input("Product Name:")
         if product:
-            response = product_info_chain.invoke({"product": translated_input})
+            response = product_info_chain.invoke({"product": product})
         else:
-            response = "Please provide the product name."
+            st.warning("Please provide the product name.")
     elif option == "Customized Responses":
         business_type = st.text_input("Business Type (e.g., Restaurant, Salon, etc.):")
         if business_type:
             response = custom_chain.invoke({"business_type": business_type, "query": translated_input})
         else:
-            response = "Please specify the business type."
-    
-    # Translate output back to user language
-    response = translate_output(response, user_lang)
-    st.write("Response:", response)
+            st.warning("Please specify the business type.")
 
-    # Contextual Suggestions
+    # Translate output back to the user's language
+    if response:
+        translated_response = translate_output(response, user_lang)
+        st.write("Response:", translated_response)
+
+    # Contextual suggestions
     if st.checkbox("Need more help? Get suggestions."):
         contextual_response = context_chain.invoke({"previous_interaction": translated_input})
         st.write("Suggestions:", contextual_response)
