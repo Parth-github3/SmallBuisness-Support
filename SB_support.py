@@ -97,16 +97,16 @@ You are a follow-up assistant. Based on the previous interaction: "{previous_int
     | StrOutputParser()
 )
 # 9. Buisness Understanding Chain
-buisness_chain = (
-    ChatPromptTemplate.from_template("""
-You are a data analyist. Based on the given text: "{buisness}", 
-Identify the buisness, the products and services offered in the buisness, the product information, 
-    customer reviews and any other neccessary information regarding the buisness.
-""")
-    | llama
-    | StrOutputParser()
-    | RunnablePassthrough
-)
+# buisness_chain = (
+#     ChatPromptTemplate.from_template("""
+# You are a data analyist. Based on the given text: "{buisness}", 
+# Identify the buisness, the products and services offered in the buisness, the product information, 
+#     customer reviews and any other neccessary information regarding the buisness.
+# """)
+#     | llama
+#     | StrOutputParser()
+#     | RunnablePassthrough
+# )
 
 ##################################### Streamlit UI ###########################################
 st.title("AI Customer Support Assistant")
@@ -130,19 +130,19 @@ option = st.selectbox(
 # User Interaction
 user_input = st.text_input("Ask your question here:")
 
-uploaded_files = st.file_uploader(
-        "Upload your PYQ papers below. (Only .pdf is allowed)", accept_multiple_files=True
-    )
-def extract():
+# uploaded_files = st.file_uploader(
+#         "Upload your PYQ papers below. (Only .pdf is allowed)", accept_multiple_files=True
+#     )
+# def extract():
     
-        extracted_text = []
-        for file in uploaded_files:
-            with pdfplumber.open(file) as pdf:
-                for page in pdf.pages:
-                    extracted_text.append(page.extract_text())
+#         extracted_text = []
+#         for file in uploaded_files:
+#             with pdfplumber.open(file) as pdf:
+#                 for page in pdf.pages:
+#                     extracted_text.append(page.extract_text())
                    
-        return extracted_text
-buisness= extract()
+#         return extracted_text
+# buisness= extract()
 
 
 if user_input:
@@ -181,5 +181,3 @@ if user_input:
         contextual_response = context_chain.invoke({"previous_interaction": translated_input})
         st.write("Suggestions:", contextual_response)
 
-if st.button("Submit"):
-    buisness_chain.invoke(buisness)
