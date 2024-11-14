@@ -12,3 +12,26 @@ llama = ChatGroq(
     temperature=0.0
 )
 
+#chatbot chains 
+base_chain = ChatPromptTemplate.from_template("""
+You are a customer support chatbot for a small business. You assist customers with their queries about products, manage bookings, and provide other necessary information. 
+
+Customer Query: {query}
+
+Respond clearly and concisely.
+""") | llama | StrOutputParser()
+
+# Streamlit UI
+st.title("AI-Based Customer Support Chatbot")
+
+# Sidebar Information
+st.sidebar.header("Chatbot Information")
+st.sidebar.write("""
+This chatbot is designed to:
+- Handle customer queries about products.
+- Manage booking requests.
+- Provide business information.
+- Respond in multiple languages.
+""")
+
+
