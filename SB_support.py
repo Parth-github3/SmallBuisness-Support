@@ -4,7 +4,7 @@ import streamlit as st
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from googletrans import Translator  # Multilingual support
+#from googletrans import Translator  # Multilingual support
 
 #LLM Model
 llama = ChatGroq(
@@ -13,7 +13,7 @@ llama = ChatGroq(
     temperature=0.0
 )
 
-translator = Translator()  # Translator for multilingual support
+#translator = Translator()  # Translator for multilingual support
 
 ##################################### Multilingual Chain ###########################################
 def translate_input(user_input):
