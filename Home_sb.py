@@ -3,13 +3,13 @@ import streamlit as st
 # Introduction Text
 st.markdown("""
 ### Hello mate!\n
-This app will make your buisness go with a boom\n
-        Functionalities; this app provides:\n
-- Multilingual support
-- Booking management
-- Product information retrieval
-- Contextual query handling
-- Customizable responses for businesses
+This app will make your buisness go with a boom!\n
+        This app is a customizable AI-powered customer support chatbot. Features include:\n
+            - Multilingual support
+            - Booking management
+            - Product information retrieval
+            - Contextual query handling
+            - Customizable responses for businesses
 """)
 
 # How to use section
