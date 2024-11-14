@@ -31,6 +31,9 @@ llama = ChatGroq(
     temperature=0.0
 )
 
+hashed_passwords = stauth.Hasher(['plain_text_password1', 'plain_text_password2']).generate()
+print(hashed_passwords)
+
 # App UI
 if authentication_status:
     authenticator.logout('Logout', 'main')
