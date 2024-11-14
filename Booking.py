@@ -82,6 +82,9 @@ if service:
         response = booking_chain.invoke({"action": action, "service": service})
     else:
         response = fallback_chain.invoke({"query": "Missing service or action details."})
+
+    d = st.date_input("When to perfom action?", value=None)
+    st.write("You have changed to:", d)
     # Base Chain: Translate output back to user language
     if response:
         translated_response = translate_output(response, user_lang)
