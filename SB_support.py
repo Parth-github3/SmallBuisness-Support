@@ -105,9 +105,9 @@ Identify the buisness, the products and services offered in the buisness, the pr
 """)
     | llama
     | StrOutputParser()
-    #| RunnablePassthrough
+    | RunnablePassthrough
 )
-
+p_chain = (buisness_chain | product_info_chain)
 ##################################### Streamlit UI ###########################################
 st.title("AI Customer Support Assistant")
 st.sidebar.header("About")
@@ -162,7 +162,7 @@ if user_input:
     elif option == "Product Information":
         product = st.text_input("Product Name:")
         if product:
-            response = product_info_chain.invoke({"product": product})
+            response = p_chain.invoke({"product": product})
         else:
             response = fallback_chain.invoke({"query": "Missing product details."})
     elif option == "Customized Responses":
@@ -181,7 +181,4 @@ if user_input:
         contextual_response = context_chain.invoke({"previous_interaction": translated_input})
         st.write("Suggestions:", contextual_response)
 
-if st.button("Submit"):
-     
-     bot_response = buisness_chain.invoke(buisness)
      
