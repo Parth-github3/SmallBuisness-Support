@@ -6,8 +6,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from googletrans import Translator  # Multilingual support
 
-
-#LLM Model
+# LLM Model
 llama = ChatGroq(
     model="LLaMA3-70B-8192",
     groq_api_key='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',
@@ -71,22 +70,30 @@ You are a follow-up assistant. Based on the previous interaction: "{previous_int
     | StrOutputParser()
 )
 
-user_input = st.text_input("Ask your question here:")
-
-if user_input:
-    # Base Chain: Translate input to English
-    translated_input, user_lang = translate_input(user_input)
+# Create form to collect both inputs
+with st.form("user_query_form"):
     business_type = st.text_input("Business Type (e.g., Restaurant, Salon, etc.):")
-    if business_type:
-        response = custom_chain.invoke({"business_type": business_type, "query": translated_input})
-    else:
-        response = fallback_chain.invoke({"query": "Missing business type."})
-    # Base Chain: Translate output back to user language
-    if response:
-        translated_response = translate_output(response, user_lang)
-        st.write("Response:", translated_response)
+    user_input = st.text_input("Ask your question here:")
 
-    # Contextual Suggestions
-    if st.checkbox("Need more help? Get suggestions."):
-        contextual_response = context_chain.invoke({"previous_interaction": translated_input})
-        st.write("Suggestions:", contextual_response)
+    # Submit button for the form
+    submit_button = st.form_submit_button(label="Submit")
+
+if submit_button:
+    if business_type and user_input:
+        # Translate input to English
+        translated_input, user_lang = translate_input(user_input)
+
+        # Generate response using the custom chain
+        response = custom_chain.invoke({"business_type": business_type, "query": translated_input})
+        
+        # Translate output back to user language
+        if response:
+            translated_response = translate_output(response, user_lang)
+            st.write("Response:", translated_response)
+
+        # Contextual Suggestions
+        if st.checkbox("Need more help? Get suggestions."):
+            contextual_response = context_chain.invoke({"previous_interaction": translated_input})
+            st.write("Suggestions:", contextual_response)
+    else:
+        st.warning("Please provide both Business Type and your Question.")
