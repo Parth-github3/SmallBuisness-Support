@@ -215,6 +215,9 @@ pages = {
     "Customized Responses": [
         st.Page("Customization.py", title="Customized Responses"),
     ],
+    "Chat Bot": [
+        st.Page("Chatbot.py", title="Chat Bot"),
+    ],
 }
 
 # Navigation page execution
