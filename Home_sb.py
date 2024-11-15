@@ -61,7 +61,7 @@ WHATSAPP_URL = f"https://wa.me/{WHATSAPP_NUMBER}?text={DEFAULT_MESSAGE}"
 st.title("Contact Us")
 
 # Try using the full file path to avoid issues
-logo_path = "C:\Users\Harshil\Flaunch\Level 2\SmallBuisness-Support\whatsapp_logo.png"  # Path to the logo file (use full path if needed)
+logo_path = "whatsapp_logo.png"  # Path to the logo file (use full path if needed)
 
 try:
     st.markdown(
