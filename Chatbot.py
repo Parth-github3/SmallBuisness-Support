@@ -46,7 +46,6 @@ Here is the following services you will provide:
     ]
 )
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-prompt = ChatPromptTemplate.format_messages(prompt)
 
 Chat_chain= LLMChain(
     llm=llama,
