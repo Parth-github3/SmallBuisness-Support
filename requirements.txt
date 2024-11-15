@@ -3,3 +3,4 @@ langchain-core
 streamlit>= 1.9.2
 googletrans
 langchain
+matplotlib
