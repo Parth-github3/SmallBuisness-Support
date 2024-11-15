@@ -48,28 +48,28 @@ Here is the following services you will provide:
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 prompt = ChatPromptTemplate.format_prompt(prompt)
 
-Chat_chain= LLMChain(
-    llm=llama,
-    prompt=prompt,
-    verbose=True,
-    memory=memory,
-)
-# 1. Chat chain
-# Chat_chain = (
-    
-# #     ChatPromptTemplate.from_template("""
-# # You are an ai chatbot fine tuned for buisness and sales.
-# # You are made for assistance for Small buisnesses to grow them. The customer will chat {userinput} with you and you will service them.
-# # Here is the following services you will provide:
-# #                                      resolve the customer queries; 
-# #                                      provide product information; 
-# #                                      book, cancel, or re-schedule any product or service; 
-# #                                      provide customized solutions for queries; 
-# #                                      Help customer to choose the best product or service according to their needs or requirements.
-# # """)
-#     | llama
-#     | StrOutputParser()
+# Chat_chain= LLMChain(
+#     llm=llama,
+#     prompt=prompt,
+#     verbose=True,
+#     memory=memory,
 # )
+# 1. Chat chain
+Chat_chain = (
+    
+    ChatPromptTemplate.from_template("""
+You are an ai chatbot fine tuned for buisness and sales.
+You are made for assistance for Small buisnesses to grow them. The customer will chat {userinput} with you and you will service them.
+Here is the following services you will provide:
+                                     resolve the customer queries; 
+                                     provide product information; 
+                                     book, cancel, or re-schedule any product or service; 
+                                     provide customized solutions for queries; 
+                                     Help customer to choose the best product or service according to their needs or requirements.
+""")
+    | llama
+    | StrOutputParser() | memory 
+)
 
 
 # 1. Input Translation Chain
