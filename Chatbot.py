@@ -35,16 +35,16 @@ Here is the following services you will provide:
 )
 
 # 1. Input Translation Chain
-def translate_input(user_input):
+def translate_input(userinput):
     """Auto-detect and translate the user input to English."""
     try:
-        detected_lang = translator.detect_language(user_input).result
+        detected_lang = translator.detect_language(userinput).result
         if detected_lang != "English":
-            user_input = translator.translate(user_input, destination_language="English").result
-        return user_input, detected_lang
+            userinput = translator.translate(userinput, destination_language="English").result
+        return userinput, detected_lang
     except Exception as e:
         #st.error(f"Error in language detection or translation: {e}")
-        return user_input, "English"  # Default to English if detection fails
+        return userinput, "English"  # Default to English if detection fails
 
 # 2. Output Translation Chain
 def translate_output(response, target_lang):
