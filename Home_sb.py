@@ -60,8 +60,9 @@ WHATSAPP_URL = f"https://wa.me/{WHATSAPP_NUMBER}?text={DEFAULT_MESSAGE}"
 ################################### Streamlit Page #######################################
 st.title("Contact Us")
 
-# Load the WhatsApp logo image
-logo_path = "C:\Users\Harshil\Flaunch\Level 2\SmallBuisness-Support\whatsapp_logo.png"  # Replace with the path to your logo file
+# Try using the full file path to avoid issues
+logo_path = "whatsapp_logo.png"  # Path to the logo file (use full path if needed)
+
 try:
     st.markdown(
         f"""
