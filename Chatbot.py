@@ -5,7 +5,14 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from googletrans import Translator  # Multilingual support
-
+from langchain_core.messages import SystemMessage
+from langchain_core.prompts import (
+    ChatPromptTemplate,
+    HumanMessagePromptTemplate,
+    MessagesPlaceholder,
+)
+from langchain.memory import ConversationBufferMemory
+from langchain.chains import LLMChain
 
 #LLM Model
 llama = ChatGroq(
@@ -17,11 +24,10 @@ llama = ChatGroq(
 translator = Translator()  # Translator for multilingual support
 ##################################### Base Chains ###########################################
 
-
-# 1. Chat chain
-Chat_chain = (
-    ChatPromptTemplate.from_template("""
-You are an ai chatbot fine tuned for buisness and sales.
+prompt = ChatPromptTemplate.from_messages(
+    [
+        SystemMessage(
+            content="""You are an ai chatbot fine tuned for buisness and sales.
 You are made for assistance for Small buisnesses to grow them. The customer will chat {userinput} with you and you will service them.
 Here is the following services you will provide:
                                      resolve the customer queries; 
@@ -29,10 +35,41 @@ Here is the following services you will provide:
                                      book, cancel, or re-schedule any product or service; 
                                      provide customized solutions for queries; 
                                      Help customer to choose the best product or service according to their needs or requirements.
-""")
-    | llama
-    | StrOutputParser()
+"""
+        ),  # The persistent system prompt
+        MessagesPlaceholder(
+            variable_name="chat_history"
+        ),  # Where the memory will be stored.
+        HumanMessagePromptTemplate.from_template(
+            "{userinput}"
+        ),  # Where the human input will injected
+    ]
 )
+
+memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+Chat_chain= LLMChain(
+    llm=llama,
+    prompt=prompt,
+    verbose=True,
+    memory=memory,
+)
+# 1. Chat chain
+# Chat_chain = (
+    
+# #     ChatPromptTemplate.from_template("""
+# # You are an ai chatbot fine tuned for buisness and sales.
+# # You are made for assistance for Small buisnesses to grow them. The customer will chat {userinput} with you and you will service them.
+# # Here is the following services you will provide:
+# #                                      resolve the customer queries; 
+# #                                      provide product information; 
+# #                                      book, cancel, or re-schedule any product or service; 
+# #                                      provide customized solutions for queries; 
+# #                                      Help customer to choose the best product or service according to their needs or requirements.
+# # """)
+#     | llama
+#     | StrOutputParser()
+# )
+
 
 # 1. Input Translation Chain
 def translate_input(userinput):
