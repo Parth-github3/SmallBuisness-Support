@@ -55,7 +55,7 @@ Input Query: "{query}"
 query_chain = (
     ChatPromptTemplate.from_template("""
 You are a customer support assistant. The user has the query: "{query}". 
-Respond with a clear and concise answer in short. If you don't know the answer, ask for more details or suggest contacting support.
+Respond with a clear and concise answer. If you don't know the answer, ask for more details or suggest contacting support.
 """)
     | llama
     | StrOutputParser()
