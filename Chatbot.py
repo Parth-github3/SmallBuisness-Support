@@ -24,40 +24,10 @@ llama = ChatGroq(
 translator = Translator()  # Translator for multilingual support
 ##################################### Base Chains ###########################################
 
-prompt = ChatPromptTemplate.from_messages(
-    [
-        SystemMessage(
-            content="""You are an ai chatbot fine tuned for buisness and sales.
-You are made for assistance for Small buisnesses to grow them. The customer will chat {userinput} with you and you will service them.
-Here is the following services you will provide:
-                                     resolve the customer queries; 
-                                     provide product information; 
-                                     book, cancel, or re-schedule any product or service; 
-                                     provide customized solutions for queries; 
-                                     Help customer to choose the best product or service according to their needs or requirements.
-"""
-        ),  # The persistent system prompt
-        MessagesPlaceholder(
-            variable_name="chat_history"
-        ),  # Where the memory will be stored.
-        HumanMessagePromptTemplate.from_template(
-            "{userinput}"
-        ),  # Where the human input will injected
-    ]
-)
-memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-
-Chat_chain= LLMChain(
-    llm=llama,
-    prompt=prompt,
-    verbose=True,
-    memory=memory,
-)
-# 1. Chat chain
-# Chat_chain = (
-    
-#     ChatPromptTemplate.from_template("""
-# You are an ai chatbot fine tuned for buisness and sales.
+# prompt = ChatPromptTemplate.from_messages(
+#     [
+#         SystemMessage(
+#             content="""You are an ai chatbot fine tuned for buisness and sales.
 # You are made for assistance for Small buisnesses to grow them. The customer will chat {userinput} with you and you will service them.
 # Here is the following services you will provide:
 #                                      resolve the customer queries; 
@@ -65,10 +35,40 @@ Chat_chain= LLMChain(
 #                                      book, cancel, or re-schedule any product or service; 
 #                                      provide customized solutions for queries; 
 #                                      Help customer to choose the best product or service according to their needs or requirements.
-# """)
-#     | llama
-#     | StrOutputParser() | memory 
+# """
+#         ),  # The persistent system prompt
+#         MessagesPlaceholder(
+#             variable_name="chat_history"
+#         ),  # Where the memory will be stored.
+#         HumanMessagePromptTemplate.from_template(
+#             "{userinput}"
+#         ),  # Where the human input will injected
+#     ]
 # )
+# memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
+# Chat_chain= LLMChain(
+#     llm=llama,
+#     prompt=prompt,
+#     verbose=True,
+#     memory=memory,
+# )
+# 1. Chat chain
+Chat_chain = (
+    
+    ChatPromptTemplate.from_template("""
+You are an ai chatbot fine tuned for buisness and sales.
+You are made for assistance for Small buisnesses to grow them. The customer will chat {userinput} with you and you will service them.
+Here is the following services you will provide:
+                                     resolve the customer queries; 
+                                     provide product information; 
+                                     book, cancel, or re-schedule any product or service; 
+                                     provide customized solutions for queries; 
+                                     Help customer to choose the best product or service according to their needs or requirements.
+""")
+    | llama
+    | StrOutputParser() | memory 
+)
 
 
 # 1. Input Translation Chain
@@ -109,8 +109,8 @@ if userinput:
     #message.write(cbt_chain.invoke(user_input))
     # Base Chain: Translate input to English
     translated_input, user_lang = translate_input(userinput)
-    #st.session_state.messages.append({"role": "user", "content": userinput})
-    response = Chat_chain.predict(userinput)
+    st.session_state.messages.append({"role": "user", "content": userinput})
+    response = Chat_chain.invoke(userinput)
     # Base Chain: Translate output back to user language
     if response:
         translated_response = translate_output(response, user_lang)
