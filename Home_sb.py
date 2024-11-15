@@ -61,7 +61,7 @@ WHATSAPP_URL = f"https://wa.me/{WHATSAPP_NUMBER}?text={DEFAULT_MESSAGE}"
 st.title("Contact Us")
 
 # Load the WhatsApp logo image
-logo_path = "C:\Users\Harshil\Downloads\whatsapp_logo.png"  # Replace with the path to your logo file
+logo_path = "C:\Users\Harshil\Flaunch\Level 2\SmallBuisness-Support\whatsapp_logo.png"  # Replace with the path to your logo file
 try:
     st.markdown(
         f"""
