@@ -110,7 +110,7 @@ if userinput:
     # Base Chain: Translate input to English
     translated_input, user_lang = translate_input(userinput)
     st.session_state.messages.append({"role": "user", "content": userinput})
-    response = Chat_chain.invoke(userinput)
+    response = Chat_chain.predict(userinput)
     # Base Chain: Translate output back to user language
     if response:
         translated_response = translate_output(response, user_lang)
