@@ -22,7 +22,7 @@ translator = Translator()  # Translator for multilingual support
 Chat_chain = (
     ChatPromptTemplate.from_template("""
 You are an ai chatbot fine tuned for buisness and sales.
-You are made for assistance for Small buisnesses to grow them.
+You are made for assistance for Small buisnesses to grow them. The customer will chat {userinput} with you and you will service them.
 Here is the following services you will provide:
                                      resolve the customer queries; 
                                      provide product information; 
