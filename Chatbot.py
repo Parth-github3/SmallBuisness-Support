@@ -45,8 +45,9 @@ Here is the following services you will provide:
         ),  # Where the human input will injected
     ]
 )
-prompt = ChatPromptTemplate.format_prompt(prompt)
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+prompt = ChatPromptTemplate.format_prompt(prompt)
+
 Chat_chain= LLMChain(
     llm=llama,
     prompt=prompt,
