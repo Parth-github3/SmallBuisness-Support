@@ -218,9 +218,6 @@ pages = {
     "Chat Bot": [
         st.Page("Chatbot.py", title="Chat Bot"),
     ],
-    "Personal Chat": [
-        st.Page("Personal.py", title="Personal Chat"),
-    ],
 }
 
 # Navigation page execution
