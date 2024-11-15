@@ -67,7 +67,7 @@ Here is the following services you will provide:
                                      Help customer to choose the best product or service according to their needs or requirements.
 """)
     | llama
-    | StrOutputParser() | memory 
+    | StrOutputParser()  
 )
 
 
