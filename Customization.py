@@ -55,6 +55,7 @@ Input Query: "{query}"
 custom_chain = (
     ChatPromptTemplate.from_template("""
 You are assisting a small business that specializes in {business_type}. Tailor your response to reflect the company's services and brand tone.
+Give answer in long form.
 The user query is: "{query}".
 """)
     | llama
