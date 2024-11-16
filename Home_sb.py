@@ -12,15 +12,6 @@ This app will make your buisness go with a boom!\n
             - Contextual query handling
             - Customizable responses for businesses
 """)
-
-# How to use section
-# st.markdown("**How to use?**")
-
-# with st.expander("Instructions to follow..."):
-#     st.markdown("""
-# Open the **Question** page -> Upload pyq papers (only in pdf format) -> Download the ***Question_response*** text file.\n 
-# You can you this file for both Answer page and Concept-Learning Plan for getting responses.\n
-#                 """)
     
 
 # Description
@@ -28,28 +19,30 @@ st.markdown("**Description about app's functions**")
 
 with st.expander("About Query..."):
     st.markdown("""
-    **Question** is a place where you upload your Past Year Question papers and get your imp questions in seconds.\n
-    Input: Question papers(one or more) **Format:** PDF\n
-    Task: It will generate you a list of questions which are repeated and catagorize it on concept base.\n
-    Output: List of imp questions. Also, you can download it as a file.
+    In **Query**, you can resolve any general queries or questions related to the buisness you have.\n
     """)
 
 with st.expander("About Booking..."):
     st.markdown("""
-In **Answer** page, you will get brief and informative answer for any questions provided. \n
-Input: The ***Question_response*** text file from the **Question** page.\n
-Task: Generation of answers with conceptual understanding.\n
-Output: Answer text file to download.                          
+In **Booking** page, you can book, cancel or reschedule any product or service you want directly.\n                          
 """)
     
-with st.expander("About Product Info..."):
+with st.expander("About Product Information..."):
     st.markdown("""
-In **Concept-Learning Plan** page, you will get a guided study plan to kickstart your studying.\n
-Input: The ***Question_response*** text file from the **Question** page.\n
-Task: Generation of a Study plan according to your imp concepts covered in the exam with a flow chart to visualize it better.\n
-Output: Plan text file to download.                                               
+In **Product Information** page, you can get product information you want to search for.\n                                               
+""")
+
+with st.expander("About Customized Responses..."):
+    st.markdown("""
+In **Customized Responses** page, you can get all the detailed description of a product or service.\n                          
 """)
     
+with st.expander("About Chat Bot..."):
+    st.markdown("""
+In **Chat Bot** page, you can chat with our chatbot and access all the features mentioned above with chatting.\n
+Like you can ask for a haircut, choose the right haircut offered by the salon, and book an appointment with it.\n                                               
+""")   
+
 # Define the WhatsApp number (including country code) and the default message
 WHATSAPP_NUMBER = "+916354252779"  # Replace with the actual WhatsApp number
 DEFAULT_MESSAGE = "Hello! I would like to inquire about your services."  # Replace with your desired message
