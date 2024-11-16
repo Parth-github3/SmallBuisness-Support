@@ -70,7 +70,7 @@ You are a follow-up assistant. Based on the previous interaction: "{previous_int
     | StrOutputParser()
 )
 
-#user_input = st.text_input("Ask your question here:")
+user_input = st.text_input("Ask your question here:")
 
 if user_input:
     # Base Chain: Translate input to English
