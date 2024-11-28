@@ -218,6 +218,9 @@ pages = {
     "Chat Bot": [
         st.Page("Chatbot.py", title="Chat Bot"),
     ],
+    "Financial Advisor": [
+        st.Page("Financial.py", title="Financial Advisor"),
+    ],
 }
 
 # Navigation page execution
