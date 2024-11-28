@@ -85,11 +85,11 @@ with st.form("financial_advisor_form"):
     # Debt information
     debt = st.number_input("Outstanding Debt ($)", min_value=0, step=1)
     debt_interest = st.number_input(
-        "Debt Interest Rate (%)", min_value=0.0, step=0.1, value=5.0,
+        "Debt Interest Rate (%)", min_value=0.0, step=0.1,
         help="Enter the annual interest rate on your outstanding debt."
     )
     monthly_payment = st.number_input(
-        "Monthly Debt Payment ($)", min_value=0, step=100, value=200,
+        "Monthly Debt Payment ($)", min_value=0, step=100,
         help="Enter the amount you pay monthly to service the debt."
     )
     
