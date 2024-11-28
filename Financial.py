@@ -93,18 +93,18 @@ with st.form("financial_advisor_form"):
         "Monthly Debt Payment ($)", min_value=0, step=100, value=200,
         help="Enter the amount you pay monthly to service the debt."
     )
+    
+    # Investment plan section (before the button)
+    st.subheader("Describe Your Investment Plan:")
+    investment_plan = st.text_area(
+        "Investment Plan (e.g., expand operations, invest in marketing, etc.)",
+        placeholder="Briefly describe your investment plan"
+    )
 
     # Submit button
     submit_financials = st.form_submit_button("Get Financial Advice")
 
-    # Investment plan input below the button
     if submit_financials:
-        st.subheader("Describe Your Investment Plan:")
-        investment_plan = st.text_area(
-            "Investment Plan (e.g., expand operations, invest in marketing, etc.)",
-            placeholder="Briefly describe your investment plan"
-        )
-        
         if investment_plan and revenue > 0 and expenses > 0:
             # Generate Financial Advice
             response = financial_chain.invoke({
