@@ -41,7 +41,13 @@ with st.expander("About Chat Bot..."):
     st.markdown("""
 In **Chat Bot** page, you can chat with our chatbot and access all the features mentioned above with chatting.\n
 Like you can ask for a haircut, choose the right haircut offered by the salon, and book an appointment with it.\n                                               
-""")   
+""") 
+
+with st.expander("About Financial Advisor..."):
+    st.markdown("""
+In **Financial Advisor** page, generates customized financial recommendations and visualizes financial distribution using graphs.\n
+ The inputs include revenue, expenses, savings goals, and investment plans.\n                          
+""")  
 
 # Define the WhatsApp number (including country code) and the default message
 WHATSAPP_NUMBER = "+916354252779"  # Replace with the actual WhatsApp number
