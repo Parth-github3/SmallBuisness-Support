@@ -156,18 +156,5 @@ with st.form("financial_advisor_form"):
                 )
             else:
                 st.write("Congratulations! You are on track to clear your debt.")
-
-            # Break-Even Analysis
-            st.subheader("Break-Even Analysis:")
-            fixed_costs = st.number_input("Fixed Costs ($)", min_value=0, step=100, value=3000)
-            variable_costs_per_unit = st.number_input("Variable Costs per Unit ($)", min_value=0.0, step=0.1, value=20.0)
-            price_per_unit = st.number_input("Price per Unit ($)", min_value=0.0, step=0.1, value=50.0)
-
-            if st.button("Calculate Break-Even Point"):
-                if price_per_unit > variable_costs_per_unit:
-                    break_even_units = fixed_costs / (price_per_unit - variable_costs_per_unit)
-                    st.write(f"Break-Even Point: **{int(break_even_units)} units**")
-                else:
-                    st.warning("Price per unit must be greater than variable costs per unit.")
         else:
             st.warning("Please enter a valid investment plan to proceed.")
