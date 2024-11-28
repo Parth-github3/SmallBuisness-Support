@@ -15,6 +15,40 @@ llama = ChatGroq(
 
 translator = Translator()  # Translator for multilingual support
 
+##################################### Base Chains ###########################################
+# 1. Input Translation Chain
+def translate_input(user_input):
+    """Auto-detect and translate the user input to English."""
+    try:
+        detected_lang = translator.detect_language(user_input).result
+        if detected_lang != "English":
+            user_input = translator.translate(user_input, destination_language="English").result
+        return user_input, detected_lang
+    except Exception as e:
+        #st.error(f"Error in language detection or translation: {e}")
+        return user_input, "English"  # Default to English if detection fails
+
+# 2. Output Translation Chain
+def translate_output(response, target_lang):
+    """Translate response back to the user's language."""
+    try:
+        if target_lang != "English":
+            response = translator.translate(response, destination_language=target_lang).result
+        return response
+    except Exception as e:
+        #st.error(f"Error in translating response: {e}")
+        return response  # Return the original response if translation fails
+
+# 3. Fallback Error Handling Chain
+fallback_chain = (
+    ChatPromptTemplate.from_template("""
+You are a fallback assistant. If the system cannot handle the query, respond politely and suggest contacting support.
+Input Query: "{query}"
+""")
+    | llama
+    | StrOutputParser()
+)
+
 ##################################### Financial Advisor Chains ###########################################
 # Custom Financial Advice Chain
 financial_chain = (
