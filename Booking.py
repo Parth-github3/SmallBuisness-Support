@@ -70,6 +70,9 @@ You are a follow-up assistant. Based on the previous interaction: "{previous_int
     | StrOutputParser()
 )
 
+with st.form("booking_form"):
+    st.header("Business Booking Assistant")
+
 service = st.text_input("Service Type (e.g., Haircut, Meeting, etc.):")
 
 action = st.text_input("Action (e.g., Book, Cancel, Reschedule):")
