@@ -4,7 +4,6 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from googletrans import Translator  # Multilingual support
 import matplotlib.pyplot as plt
-import numpy as np
 
 # LLM Model
 llama = ChatGroq(
@@ -83,12 +82,6 @@ with st.form("financial_advisor_form"):
     expenses = st.number_input("Monthly Expenses ($)", min_value=0, step=100, value=5000)
     savings_goal = st.number_input("Savings Goal ($)", min_value=0, step=100, value=2000)
     
-    # Investment plan
-    investment_plan = st.text_area(
-        "Describe Your Investment Plan (e.g., expand operations, invest in marketing, etc.)", 
-        placeholder="Briefly describe your investment plan"
-    )
-    
     # Debt information
     debt = st.number_input("Outstanding Debt ($)", min_value=0, step=100, value=5000)
     debt_interest = st.number_input(
@@ -103,71 +96,77 @@ with st.form("financial_advisor_form"):
     # Submit button
     submit_financials = st.form_submit_button("Get Financial Advice")
 
-if submit_financials:
-    if revenue > 0 and expenses > 0:
-        # Generate Financial Advice
-        response = financial_chain.invoke({
-            "revenue": revenue,
-            "expenses": expenses,
-            "savings_goal": savings_goal,
-            "investment_plan": investment_plan,
-            "debt": f"{debt} at {debt_interest}% interest with ${monthly_payment}/month payment"
-        })
+    # Investment plan input below the button
+    if submit_financials:
+        st.subheader("Describe Your Investment Plan:")
+        investment_plan = st.text_area(
+            "Investment Plan (e.g., expand operations, invest in marketing, etc.)",
+            placeholder="Briefly describe your investment plan"
+        )
+        
+        if investment_plan and revenue > 0 and expenses > 0:
+            # Generate Financial Advice
+            response = financial_chain.invoke({
+                "revenue": revenue,
+                "expenses": expenses,
+                "savings_goal": savings_goal,
+                "investment_plan": investment_plan,
+                "debt": f"{debt} at {debt_interest}% interest with ${monthly_payment}/month payment"
+            })
 
-        # Display Financial Advice
-        st.subheader("Customized Financial Recommendations:")
-        st.write(response)
+            # Display Financial Advice
+            st.subheader("Customized Financial Recommendations:")
+            st.write(response)
 
-        # Financial Distribution Visualization
-        st.subheader("Financial Distribution:")
-        financial_data = {
-            "Revenue": revenue,
-            "Expenses": expenses,
-            "Savings Goal": savings_goal,
-            "Debt Payment": monthly_payment * 12,
-            "Remaining Funds": max(revenue - expenses - savings_goal - (monthly_payment * 12), 0)
-        }
+            # Financial Distribution Visualization
+            st.subheader("Financial Distribution:")
+            financial_data = {
+                "Revenue": revenue,
+                "Expenses": expenses,
+                "Savings Goal": savings_goal,
+                "Debt Payment": monthly_payment * 12,
+                "Remaining Funds": max(revenue - expenses - savings_goal - (monthly_payment * 12), 0)
+            }
 
-        fig, ax = plt.subplots(figsize=(6, 6))
-        labels = financial_data.keys()
-        sizes = financial_data.values()
-        explode = (0.1, 0, 0, 0, 0)  # Emphasize 'Revenue'
-        colors = ['#2E91E5', '#E15F99', '#1CA71C', '#FB0D0D', '#FFC300']
+            fig, ax = plt.subplots(figsize=(6, 6))
+            labels = financial_data.keys()
+            sizes = financial_data.values()
+            explode = (0.1, 0, 0, 0, 0)  # Emphasize 'Revenue'
+            colors = ['#2E91E5', '#E15F99', '#1CA71C', '#FB0D0D', '#FFC300']
 
-        ax.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
-        ax.axis('equal')  # Equal aspect ratio ensures the pie is drawn as a circle.
+            ax.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
+            ax.axis('equal')  # Equal aspect ratio ensures the pie is drawn as a circle.
 
-        st.pyplot(fig)
+            st.pyplot(fig)
 
-        # Debt Analysis
-        st.subheader("Debt Analysis:")
-        total_debt_payment = monthly_payment * 12
-        remaining_debt = debt - total_debt_payment if debt > total_debt_payment else 0
-        interest_paid = debt * (debt_interest / 100)
+            # Debt Analysis
+            st.subheader("Debt Analysis:")
+            total_debt_payment = monthly_payment * 12
+            remaining_debt = debt - total_debt_payment if debt > total_debt_payment else 0
+            interest_paid = debt * (debt_interest / 100)
 
-        st.write(f"Total Debt Paid This Year: **${total_debt_payment:,.2f}**")
-        st.write(f"Remaining Debt After a Year: **${remaining_debt:,.2f}**")
-        st.write(f"Estimated Interest Paid This Year: **${interest_paid:,.2f}**")
+            st.write(f"Total Debt Paid This Year: **${total_debt_payment:,.2f}**")
+            st.write(f"Remaining Debt After a Year: **${remaining_debt:,.2f}**")
+            st.write(f"Estimated Interest Paid This Year: **${interest_paid:,.2f}**")
 
-        if remaining_debt > 0:
-            st.write(
-                "Consider increasing your monthly debt payments or restructuring the debt to reduce interest payments."
-            )
-        else:
-            st.write("Congratulations! You are on track to clear your debt.")
-
-        # Break-Even Analysis
-        st.subheader("Break-Even Analysis:")
-        fixed_costs = st.number_input("Fixed Costs ($)", min_value=0, step=100, value=3000)
-        variable_costs_per_unit = st.number_input("Variable Costs per Unit ($)", min_value=0.0, step=0.1, value=20.0)
-        price_per_unit = st.number_input("Price per Unit ($)", min_value=0.0, step=0.1, value=50.0)
-
-        if st.button("Calculate Break-Even Point"):
-            if price_per_unit > variable_costs_per_unit:
-                break_even_units = fixed_costs / (price_per_unit - variable_costs_per_unit)
-                st.write(f"Break-Even Point: **{int(break_even_units)} units**")
+            if remaining_debt > 0:
+                st.write(
+                    "Consider increasing your monthly debt payments or restructuring the debt to reduce interest payments."
+                )
             else:
-                st.warning("Price per unit must be greater than variable costs per unit.")
+                st.write("Congratulations! You are on track to clear your debt.")
 
-    else:
-        st.warning("Please enter valid financial details to proceed.")
+            # Break-Even Analysis
+            st.subheader("Break-Even Analysis:")
+            fixed_costs = st.number_input("Fixed Costs ($)", min_value=0, step=100, value=3000)
+            variable_costs_per_unit = st.number_input("Variable Costs per Unit ($)", min_value=0.0, step=0.1, value=20.0)
+            price_per_unit = st.number_input("Price per Unit ($)", min_value=0.0, step=0.1, value=50.0)
+
+            if st.button("Calculate Break-Even Point"):
+                if price_per_unit > variable_costs_per_unit:
+                    break_even_units = fixed_costs / (price_per_unit - variable_costs_per_unit)
+                    st.write(f"Break-Even Point: **{int(break_even_units)} units**")
+                else:
+                    st.warning("Price per unit must be greater than variable costs per unit.")
+        else:
+            st.warning("Please enter a valid investment plan to proceed.")
