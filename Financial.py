@@ -72,7 +72,6 @@ Respond in a professional tone with actionable insights.
 )
 
 ##################################### Streamlit Financial Advisor Page ###########################################
-st.title("Financial Advisor for Small Businesses")
 
 # Form for user input
 with st.form("financial_advisor_form"):
