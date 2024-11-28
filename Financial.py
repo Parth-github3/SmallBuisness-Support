@@ -78,7 +78,7 @@ with st.form("financial_advisor_form"):
     st.header("Enter Business Financial Details:")
     
     # Financial inputs
-    revenue = st.number_input("Monthly Revenue ($)", min_value=0, step=1, value=10000)
+    revenue = st.number_input("Monthly Revenue ($)", min_value=0, step=1)
     expenses = st.number_input("Monthly Expenses ($)", min_value=0, step=1, value=5000)
     savings_goal = st.number_input("Savings Goal ($)", min_value=0, step=1, value=2000)
     
