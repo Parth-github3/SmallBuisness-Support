@@ -58,11 +58,11 @@ Savings Goal: {savings_goal}
 Investment Plan: {investment_plan}
 Debt: {debt}
 
-Provide a detailed financial recommendation with the following:
+Provide detailed financial recommendations with the following:
 1. Ways to optimize expenses.
 2. Strategies to achieve the savings goal.
-3. Insights on the investment plan.
-4. Debt reduction strategies.
+3. Insights on the investment plan, including feasibility and potential risks.
+4. Debt reduction strategies tailored to the user's financial condition.
 5. Suggestions for reinvestment into the business.
 
 Respond in a professional tone with actionable insights.
@@ -77,14 +77,28 @@ st.title("Financial Advisor for Small Businesses")
 # Form for user input
 with st.form("financial_advisor_form"):
     st.header("Enter Business Financial Details:")
+    
+    # Financial inputs
     revenue = st.number_input("Monthly Revenue ($)", min_value=0, step=100, value=10000)
     expenses = st.number_input("Monthly Expenses ($)", min_value=0, step=100, value=5000)
     savings_goal = st.number_input("Savings Goal ($)", min_value=0, step=100, value=2000)
+    
+    # Investment plan
     investment_plan = st.text_area(
         "Describe Your Investment Plan (e.g., expand operations, invest in marketing, etc.)", 
         placeholder="Briefly describe your investment plan"
     )
+    
+    # Debt information
     debt = st.number_input("Outstanding Debt ($)", min_value=0, step=100, value=5000)
+    debt_interest = st.number_input(
+        "Debt Interest Rate (%)", min_value=0.0, step=0.1, value=5.0,
+        help="Enter the annual interest rate on your outstanding debt."
+    )
+    monthly_payment = st.number_input(
+        "Monthly Debt Payment ($)", min_value=0, step=100, value=200,
+        help="Enter the amount you pay monthly to service the debt."
+    )
 
     # Submit button
     submit_financials = st.form_submit_button("Get Financial Advice")
@@ -97,7 +111,7 @@ if submit_financials:
             "expenses": expenses,
             "savings_goal": savings_goal,
             "investment_plan": investment_plan,
-            "debt": debt
+            "debt": f"{debt} at {debt_interest}% interest with ${monthly_payment}/month payment"
         })
 
         # Display Financial Advice
@@ -110,8 +124,8 @@ if submit_financials:
             "Revenue": revenue,
             "Expenses": expenses,
             "Savings Goal": savings_goal,
-            "Debt": debt,
-            "Remaining Funds": max(revenue - expenses - savings_goal - debt, 0)
+            "Debt Payment": monthly_payment * 12,
+            "Remaining Funds": max(revenue - expenses - savings_goal - (monthly_payment * 12), 0)
         }
 
         fig, ax = plt.subplots(figsize=(6, 6))
@@ -124,6 +138,23 @@ if submit_financials:
         ax.axis('equal')  # Equal aspect ratio ensures the pie is drawn as a circle.
 
         st.pyplot(fig)
+
+        # Debt Analysis
+        st.subheader("Debt Analysis:")
+        total_debt_payment = monthly_payment * 12
+        remaining_debt = debt - total_debt_payment if debt > total_debt_payment else 0
+        interest_paid = debt * (debt_interest / 100)
+
+        st.write(f"Total Debt Paid This Year: **${total_debt_payment:,.2f}**")
+        st.write(f"Remaining Debt After a Year: **${remaining_debt:,.2f}**")
+        st.write(f"Estimated Interest Paid This Year: **${interest_paid:,.2f}**")
+
+        if remaining_debt > 0:
+            st.write(
+                "Consider increasing your monthly debt payments or restructuring the debt to reduce interest payments."
+            )
+        else:
+            st.write("Congratulations! You are on track to clear your debt.")
 
         # Break-Even Analysis
         st.subheader("Break-Even Analysis:")
