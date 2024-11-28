@@ -220,7 +220,7 @@ pages = {
     ],
     "Financial Advisor": [
         st.Page("Financial.py", title="Financial Advisor"),
-    ],
+    ]
 }
 
 # Navigation page execution
