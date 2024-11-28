@@ -79,11 +79,11 @@ with st.form("financial_advisor_form"):
     
     # Financial inputs
     revenue = st.number_input("Monthly Revenue ($)", min_value=0, step=1)
-    expenses = st.number_input("Monthly Expenses ($)", min_value=0, step=1, value=5000)
-    savings_goal = st.number_input("Savings Goal ($)", min_value=0, step=1, value=2000)
+    expenses = st.number_input("Monthly Expenses ($)", min_value=0, step=1)
+    savings_goal = st.number_input("Savings Goal ($)", min_value=0, step=1)
     
     # Debt information
-    debt = st.number_input("Outstanding Debt ($)", min_value=0, step=1, value=5000)
+    debt = st.number_input("Outstanding Debt ($)", min_value=0, step=1)
     debt_interest = st.number_input(
         "Debt Interest Rate (%)", min_value=0.0, step=0.1, value=5.0,
         help="Enter the annual interest rate on your outstanding debt."
