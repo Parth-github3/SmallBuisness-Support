@@ -4,6 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from googletrans import Translator  # Multilingual support
 import matplotlib.pyplot as plt
+import numpy as np
 
 # LLM Model
 llama = ChatGroq(
