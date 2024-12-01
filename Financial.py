@@ -157,5 +157,3 @@ with st.form("financial_advisor_form"):
                 st.write("Congratulations! You are on track to clear your debt.")
         else:
             st.warning("Please enter a valid investment plan to proceed.")
-
-            # 
