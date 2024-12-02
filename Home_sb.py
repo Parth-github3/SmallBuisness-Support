@@ -13,7 +13,6 @@ This app will make your buisness go with a boom!\n
             - Customizable responses for businesses
             - Financial Adivisor with Dept Analysis
 """)
-    
 
 # Description
 st.markdown("**Description about app's functions**")
