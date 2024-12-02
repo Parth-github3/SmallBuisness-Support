@@ -11,6 +11,7 @@ This app will make your buisness go with a boom!\n
             - Product information retrieval
             - Contextual query handling
             - Customizable responses for businesses
+            - Financial Adivisor with Dept Analysis
 """)
     
 
