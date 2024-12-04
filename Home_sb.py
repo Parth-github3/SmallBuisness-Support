@@ -74,3 +74,5 @@ try:
 except Exception as e:
     st.error("WhatsApp logo could not be loaded. Please ensure the image file exists.")
     st.write(f"Error: {e}")
+
+    #
